@@ -1,3 +1,6 @@
+dep:
+	dep ensure -v
+
 install:
 	go install -v ./cmd/vault-secrets-proxy-server/
 
