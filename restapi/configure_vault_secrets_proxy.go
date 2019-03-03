@@ -27,8 +27,6 @@ func configureAPI(api *operations.VaultSecretsProxyAPI) http.Handler {
 
 	// Set your custom logger if needed. Default one is log.Printf
 	// Expected interface func(string, ...interface{})
-	//
-	// Example:
 	api.Logger = log.Printf
 
 	api.JSONConsumer = runtime.JSONConsumer()
