@@ -11,6 +11,7 @@ gen: validate
 	swagger generate server \
 		--target=. \
 		--spec=./swagger/swagger.yml \
+		--exclude-main \
 		--name=vault-secrets-proxy
 
 
