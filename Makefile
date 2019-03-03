@@ -14,6 +14,9 @@ gen: validate
 		--exclude-main \
 		--name=vault-secrets-proxy
 
+run: install
+	cp kv-data.json.sample /tmp/kv-data.json
+	~/go/bin/vault-secrets-proxy-server
 
 # just added `gen` and `validate`
 .PHONY: install gen validate

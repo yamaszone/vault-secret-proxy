@@ -5,8 +5,10 @@ package restapi
 import (
 	"crypto/tls"
 	"encoding/json"
+	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 
 	errors "github.com/go-openapi/errors"
 	runtime "github.com/go-openapi/runtime"
@@ -40,16 +42,28 @@ func configureAPI(api *operations.VaultSecretsProxyAPI) http.Handler {
 	})
 	api.GetSecretsHandler = operations.GetSecretsHandlerFunc(func(params operations.GetSecretsParams) middleware.Responder {
 		// TODO: Make payload configurable to allow loading both dummy and real values.
-		jsonBytes := []byte(
-			`{
-				"key1":"val1",
-				"key2":"val2"
-			}`)
-
-		var response interface{}
-		err := json.Unmarshal(jsonBytes, &response)
+		jsonFile, err := os.Open("/tmp/kv-data.json")
 		if err != nil {
-			api.Logger("Error parsing JSON ", err)
+			api.Logger("Error opening kv-data.json: ", err)
+		}
+		defer jsonFile.Close()
+
+		jsonBytes, err := ioutil.ReadAll(jsonFile)
+		if err != nil {
+			api.Logger("Error reading kv-data.json: ", err)
+		}
+		/*
+			// Commented out for debugging purpose.
+			jsonBytes := []byte(
+				`{
+					"key1":"val1",
+					"key2":"val2"
+				}`)
+		*/
+		var response map[string]interface{}
+		err = json.Unmarshal(jsonBytes, &response)
+		if err != nil {
+			api.Logger("Error parsing JSON: ", err)
 		}
 
 		return operations.NewGetSecretsOK().WithPayload(response)
