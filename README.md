@@ -19,7 +19,7 @@ PoC Vault secret proxy to work as a stub server
     --help, -h             display this help and exit
   ```
   - `$ ~/go/bin/vault-secrets-proxy-server`
-  - `curl -sS http://127.0.0.1:9999/secrets | jq .`
+  - `curl -sS http://127.0.0.1:9999/v1/secrets | jq .`
   ```
   {
     "key1": "val1",
@@ -27,7 +27,7 @@ PoC Vault secret proxy to work as a stub server
   }
   ```
   - Using [httpie](https://github.com/jakubroztocil/httpie)
-    - `$ http get http://127.0.0.1:9999/secrets`
+    - `$ http get http://127.0.0.1:9999/v1/secrets`
     ```
     HTTP/1.1 200 OK
     Content-Length: 30
@@ -39,7 +39,7 @@ PoC Vault secret proxy to work as a stub server
         "key2": "val2"
     }
     ```
-    - `$ http get http://127.0.0.1:9999/healthz`
+    - `$ http get http://127.0.0.1:9999/v1/healthz`
     ```
     HTTP/1.1 200 OK
     Content-Length: 0

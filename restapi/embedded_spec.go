@@ -26,6 +26,7 @@ func init() {
     "title": "Vault Secrets Proxy Sidecar",
     "version": "1.0.0"
   },
+  "basePath": "/v1",
   "paths": {
     "/healthz": {
       "get": {
@@ -73,6 +74,7 @@ func init() {
     "title": "Vault Secrets Proxy Sidecar",
     "version": "1.0.0"
   },
+  "basePath": "/v1",
   "paths": {
     "/healthz": {
       "get": {

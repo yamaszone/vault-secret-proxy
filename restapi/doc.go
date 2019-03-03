@@ -6,7 +6,7 @@ Package restapi Vault Secrets Proxy Sidecar
     Schemes:
       http
     Host: localhost
-    BasePath: /
+    BasePath: /v1
     Version: 1.0.0
 
     Consumes:

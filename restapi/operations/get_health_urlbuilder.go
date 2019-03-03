@@ -38,6 +38,9 @@ func (o *GetHealthURL) Build() (*url.URL, error) {
 	var _path = "/healthz"
 
 	_basePath := o._basePath
+	if _basePath == "" {
+		_basePath = "/v1"
+	}
 	_result.Path = golangswaggerpaths.Join(_basePath, _path)
 
 	return &_result, nil
