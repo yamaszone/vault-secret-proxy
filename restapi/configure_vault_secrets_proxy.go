@@ -39,6 +39,7 @@ func configureAPI(api *operations.VaultSecretsProxyAPI) http.Handler {
 		return operations.NewGetHealthOK()
 	})
 	api.GetSecretsHandler = operations.GetSecretsHandlerFunc(func(params operations.GetSecretsParams) middleware.Responder {
+		// TODO: Make payload configurable to allow loading both dummy and real values.
 		jsonBytes := []byte(
 			`{
 				"key1":"val1",
