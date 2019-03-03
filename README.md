@@ -18,7 +18,9 @@ PoC Vault secret proxy to work as a stub server
     --port PORT, -p PORT   port to listen to [default: 9999]
     --help, -h             display this help and exit
   ```
-  - `$ ~/go/bin/vault-secrets-proxy-server`
+- Launch server
+  - `$ make run`
+- Play with the server
   - `curl -sS http://127.0.0.1:9999/v1/secrets | jq .`
   ```
   {
