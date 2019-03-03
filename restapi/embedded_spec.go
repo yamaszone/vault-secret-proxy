@@ -27,6 +27,20 @@ func init() {
     "version": "1.0.0"
   },
   "paths": {
+    "/healthz": {
+      "get": {
+        "produces": [
+          "text/plain"
+        ],
+        "summary": "server health check",
+        "operationId": "getHealth",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/secrets": {
       "get": {
         "produces": [
@@ -60,6 +74,20 @@ func init() {
     "version": "1.0.0"
   },
   "paths": {
+    "/healthz": {
+      "get": {
+        "produces": [
+          "text/plain"
+        ],
+        "summary": "server health check",
+        "operationId": "getHealth",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/secrets": {
       "get": {
         "produces": [

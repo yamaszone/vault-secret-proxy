@@ -14,6 +14,7 @@ Package restapi Vault Secrets Proxy Sidecar
 
     Produces:
     - application/json
+    - text/plain
 
 swagger:meta
 */

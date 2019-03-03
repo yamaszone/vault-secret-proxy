@@ -19,3 +19,12 @@ paths:
             type: "object"
         404:
           description: "Secrets not found"
+  /healthz:
+    get:
+      summary: "server health check"
+      operationId: "getHealth"
+      produces:
+      - "text/plain"
+      responses:
+        200:
+          description: "OK"

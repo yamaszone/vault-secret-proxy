@@ -37,6 +37,10 @@ func NewVaultSecretsProxyAPI(spec *loads.Document) *VaultSecretsProxyAPI {
 		BearerAuthenticator: security.BearerAuth,
 		JSONConsumer:        runtime.JSONConsumer(),
 		JSONProducer:        runtime.JSONProducer(),
+		TxtProducer:         runtime.TextProducer(),
+		GetHealthHandler: GetHealthHandlerFunc(func(params GetHealthParams) middleware.Responder {
+			return middleware.NotImplemented("operation GetHealth has not yet been implemented")
+		}),
 		GetSecretsHandler: GetSecretsHandlerFunc(func(params GetSecretsParams) middleware.Responder {
 			return middleware.NotImplemented("operation GetSecrets has not yet been implemented")
 		}),
@@ -70,7 +74,11 @@ type VaultSecretsProxyAPI struct {
 
 	// JSONProducer registers a producer for a "application/json" mime type
 	JSONProducer runtime.Producer
+	// TxtProducer registers a producer for a "text/plain" mime type
+	TxtProducer runtime.Producer
 
+	// GetHealthHandler sets the operation handler for the get health operation
+	GetHealthHandler GetHealthHandler
 	// GetSecretsHandler sets the operation handler for the get secrets operation
 	GetSecretsHandler GetSecretsHandler
 
@@ -136,6 +144,14 @@ func (o *VaultSecretsProxyAPI) Validate() error {
 		unregistered = append(unregistered, "JSONProducer")
 	}
 
+	if o.TxtProducer == nil {
+		unregistered = append(unregistered, "TxtProducer")
+	}
+
+	if o.GetHealthHandler == nil {
+		unregistered = append(unregistered, "GetHealthHandler")
+	}
+
 	if o.GetSecretsHandler == nil {
 		unregistered = append(unregistered, "GetSecretsHandler")
 	}
@@ -196,6 +212,9 @@ func (o *VaultSecretsProxyAPI) ProducersFor(mediaTypes []string) map[string]runt
 		case "application/json":
 			result["application/json"] = o.JSONProducer
 
+		case "text/plain":
+			result["text/plain"] = o.TxtProducer
+
 		}
 
 		if p, ok := o.customProducers[mt]; ok {
@@ -237,6 +256,11 @@ func (o *VaultSecretsProxyAPI) initHandlerCache() {
 	if o.handlers == nil {
 		o.handlers = make(map[string]map[string]http.Handler)
 	}
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/healthz"] = NewGetHealth(o.context, o.GetHealthHandler)
 
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)

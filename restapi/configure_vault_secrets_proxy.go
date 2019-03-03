@@ -33,6 +33,11 @@ func configureAPI(api *operations.VaultSecretsProxyAPI) http.Handler {
 
 	api.JSONProducer = runtime.JSONProducer()
 
+	api.TxtProducer = runtime.TextProducer()
+
+	api.GetHealthHandler = operations.GetHealthHandlerFunc(func(params operations.GetHealthParams) middleware.Responder {
+		return operations.NewGetHealthOK()
+	})
 	api.GetSecretsHandler = operations.GetSecretsHandlerFunc(func(params operations.GetSecretsParams) middleware.Responder {
 		jsonBytes := []byte(
 			`{
