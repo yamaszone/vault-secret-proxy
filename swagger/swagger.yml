@@ -1,0 +1,21 @@
+swagger: "2.0"
+info:
+  title: "Vault Secrets Proxy Sidecar"
+  version: "1.0.0"
+schemes:
+- "http"
+paths:
+  /secrets:
+    get:
+      summary: "get secrets configured in this sidecar"
+      operationId: "getSecrets"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            description: "list of secrets"
+            type: "object"
+        404:
+          description: "Secrets not found"
