@@ -2,8 +2,9 @@
 PoC Vault secret proxy to work as a stub server
 
 ## Prerequisites
-- [dep v0.5.0](https://github.com/golang/dep)
-- [go-swagger v0.18.0](https://github.com/go-swagger/go-swagger)
+- [Go v1.12](https://golang.org/dl/)
+- [dep v0.5.0](https://github.com/golang/dep/releases/tag/v0.5.0)
+- [go-swagger v0.18.0](https://github.com/go-swagger/go-swagger/releases/tag/v0.18.0)
 
 ## Quickstart
 - Checkout the repository
