@@ -25,8 +25,8 @@ PoC Vault secret proxy to work as a stub server
   - `curl -sS http://127.0.0.1:9999/v1/secrets | jq .`
   ```
   {
-    "key1": "val1",
-    "key2": "val2"
+    "API_TOKEN": "token",
+    "DB_PASSWORD": "password"
   }
   ```
   - Using [httpie](https://github.com/jakubroztocil/httpie)
@@ -38,8 +38,8 @@ PoC Vault secret proxy to work as a stub server
     Date: Sun, 03 Mar 2019 03:08:12 GMT
 
     {
-        "key1": "val1",
-        "key2": "val2"
+      "API_TOKEN": "token",
+      "DB_PASSWORD": "password"
     }
     ```
     - `$ http get http://127.0.0.1:9999/v1/healthz`

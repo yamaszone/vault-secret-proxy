@@ -1,4 +1,4 @@
 {
-  "key1": "val1",
-  "key2": "val2"
+  "API_TOKEN": "vault-mount/app/token",
+  "DB_PASSWORD": "vault-mount/app/db/password"
 }

@@ -4,17 +4,18 @@ package restapi
 
 import (
 	"crypto/tls"
-	"encoding/json"
-	"io/ioutil"
+	//"fmt"
 	"log"
 	"net/http"
-	"os"
+	"strings"
 
 	errors "github.com/go-openapi/errors"
+	//iam_auth "github.com/daveadams/onthelambda"
 	runtime "github.com/go-openapi/runtime"
 	middleware "github.com/go-openapi/runtime/middleware"
 
 	"vault-secret-proxy/restapi/operations"
+	"vault-secret-proxy/utils"
 )
 
 //go:generate swagger generate server --target ../../vault-secret-proxy --name VaultSecretsProxy --spec ../swagger/swagger.yml
@@ -41,32 +42,31 @@ func configureAPI(api *operations.VaultSecretsProxyAPI) http.Handler {
 		return operations.NewGetHealthOK()
 	})
 	api.GetSecretsHandler = operations.GetSecretsHandlerFunc(func(params operations.GetSecretsParams) middleware.Responder {
-		// TODO: Make payload configurable to allow loading both dummy and real values.
-		jsonFile, err := os.Open("/tmp/kv-data.json")
+		kv_payload, err := utils.ReadJsonFile("/tmp/kv-data.json")
 		if err != nil {
-			api.Logger("Error opening kv-data.json: ", err)
-		}
-		defer jsonFile.Close()
-
-		jsonBytes, err := ioutil.ReadAll(jsonFile)
-		if err != nil {
-			api.Logger("Error reading kv-data.json: ", err)
+			api.Logger("Error reading key-value data file.")
 		}
 		/*
-			// Commented out for debugging purpose.
-			jsonBytes := []byte(
-				`{
-					"key1":"val1",
-					"key2":"val2"
-				}`)
+			client, err := iam_auth.VaultClient()
+			if err != nil {
+				log.Fatalf("ERROR: %s", err)
+			}
 		*/
-		var response map[string]interface{}
-		err = json.Unmarshal(jsonBytes, &response)
-		if err != nil {
-			api.Logger("Error parsing JSON: ", err)
+		for k, v := range kv_payload {
+			/*
+				resp, err := client.Logical().Read(v)
+				if err != nil {
+					api.Logger("ERROR: %s", err)
+				}
+			*/
+			url_parts := strings.Split(v.(string), "/")
+			key_id := url_parts[len(url_parts)-1]
+			//kv_payload[k] = resp.Data[key_id].(string)
+			// below is a placeholder
+			kv_payload[k] = key_id
 		}
 
-		return operations.NewGetSecretsOK().WithPayload(response)
+		return operations.NewGetSecretsOK().WithPayload(kv_payload)
 	})
 
 	api.ServerShutdown = func() {}
