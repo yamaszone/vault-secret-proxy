@@ -42,7 +42,7 @@ func configureAPI(api *operations.VaultSecretsProxyAPI) http.Handler {
 		return operations.NewGetHealthOK()
 	})
 	api.GetSecretsHandler = operations.GetSecretsHandlerFunc(func(params operations.GetSecretsParams) middleware.Responder {
-		kv_payload, err := utils.ReadJsonFile("/tmp/kv-data.json")
+		kv_payload, err := utils.ReadJsonFile("/etc/kv-data.json")
 		if err != nil {
 			api.Logger("Error reading key-value data file.")
 		}

@@ -1,3 +1,4 @@
+# This Makefile used only during local development on macOS. Prefer Docker.
 dep:
 	dep ensure -v
 
@@ -11,12 +12,11 @@ gen: validate
 	swagger generate server \
 		--target=. \
 		--spec=./swagger/swagger.yml \
-		--exclude-main \
 		--name=vault-secrets-proxy
 
 run: install
-	cp kv-data.json.sample /tmp/kv-data.json
-	~/go/bin/vault-secrets-proxy-server
+	sudo cp kv-data.json.sample /etc/kv-data.json
+	~/go/bin/vault-secrets-proxy-server --host=0.0.0.0 --port=9999
 
 all: dep run
 

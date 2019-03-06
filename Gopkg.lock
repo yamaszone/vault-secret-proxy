@@ -18,22 +18,6 @@
   revision = "de5bf2ad457846296e2031421a34e2568e304e35"
 
 [[projects]]
-  digest = "1:211fb215a5ea359a0661808c1b42687138c430a156e31081b09433640a4be0b9"
-  name = "github.com/alexflint/go-arg"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "f40417ef119019b1c94b79f3f18b7f66b9fb6bce"
-  version = "v1.0.0"
-
-[[projects]]
-  digest = "1:38d698f47024bd1358f279ae302feb5e1b7de647635b578ed1e681b259767118"
-  name = "github.com/alexflint/go-scalar"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "6638fbbc28f9ad0136ef5fd84a15c995e08e161f"
-  version = "v1.0.0"
-
-[[projects]]
   digest = "1:320e7ead93de9fd2b0e59b50fd92a4d50c1f8ab455d96bc2eb083267453a9709"
   name = "github.com/asaskevich/govalidator"
   packages = ["."]
@@ -227,7 +211,6 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
-    "github.com/alexflint/go-arg",
     "github.com/go-openapi/errors",
     "github.com/go-openapi/loads",
     "github.com/go-openapi/runtime",

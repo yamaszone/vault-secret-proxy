@@ -13,7 +13,7 @@ type KeyValueConfig map[string]interface{}
 // ReadJsonFile parses JSON file containing kv-pairs and builds a map
 func ReadJsonFile(filename string) (KeyValueConfig, error) {
 
-	jsonFile, err := os.Open("/tmp/kv-data.json")
+	jsonFile, err := os.Open("/etc/kv-data.json")
 	if err != nil {
 		log.Printf("Error opening kv-data.json: %s", err)
 	}

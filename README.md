@@ -12,15 +12,10 @@ PoC Vault secret proxy to work as a stub server
   - `make dep` # Installs all necessary dependencies
   - `make install` to install binary as `~/go/bin/vault-secret-proxy`
   - `~/go/bin/vault-secrets-proxy-server --help`
-  ```
-  Usage: vault-secrets-proxy-server [--port PORT]
 
-  Options:
-    --port PORT, -p PORT   port to listen to [default: 9999]
-    --help, -h             display this help and exit
-  ```
 - Launch server
   - `$ make run`
+
 - Play with the server
   - `curl -sS http://127.0.0.1:9999/v1/secrets | jq .`
   ```

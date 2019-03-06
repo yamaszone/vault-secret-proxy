@@ -5,7 +5,7 @@ import (
 )
 
 func TestReadJsonFile(t *testing.T) {
-	kvdata, err := ReadJsonFile("/tmp/kv-data.json")
+	kvdata, err := ReadJsonFile("/etc/kv-data.json")
 	if err != nil {
 		t.Error("Error reading KV file.")
 	}
