@@ -18,6 +18,9 @@ run: install
 	sudo cp kv-data.json.sample /etc/kv-data.json
 	~/go/bin/vault-secrets-proxy-server --host=0.0.0.0 --port=9999
 
+test:
+	go test ./... -coverprofile=cover.out
+
 all: dep run
 
 .PHONY: dep
