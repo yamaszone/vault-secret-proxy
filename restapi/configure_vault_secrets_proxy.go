@@ -7,10 +7,11 @@ import (
 	//"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 
 	errors "github.com/go-openapi/errors"
-	//iam_auth "github.com/daveadams/onthelambda"
+	iam_auth "github.com/daveadams/onthelambda"
 	runtime "github.com/go-openapi/runtime"
 	middleware "github.com/go-openapi/runtime/middleware"
 
@@ -46,24 +47,32 @@ func configureAPI(api *operations.VaultSecretsProxyAPI) http.Handler {
 		if err != nil {
 			api.Logger("Error reading key-value data file.")
 		}
-		/*
+
+		// The following is a cheap approach for local development
+		if os.Getenv("VAULT_IS_STUB") == "yes" {
+			for k, v := range kv_payload {
+				url_parts := strings.Split(v.(string), "/")
+				key_id := url_parts[len(url_parts)-1]
+				// Use last part of the path as dummy secret
+				kv_payload[k] = key_id
+			}
+
+		} else {
 			client, err := iam_auth.VaultClient()
 			if err != nil {
 				log.Fatalf("ERROR: %s", err)
 			}
-		*/
-		for k, v := range kv_payload {
-			/*
-				resp, err := client.Logical().Read(v)
+			api.Logger("Successfully authenticated with Vault server.")
+
+			for k, v := range kv_payload {
+				response, err := client.Logical().Read(v.(string))
 				if err != nil {
 					api.Logger("ERROR: %s", err)
 				}
-			*/
-			url_parts := strings.Split(v.(string), "/")
-			key_id := url_parts[len(url_parts)-1]
-			//kv_payload[k] = resp.Data[key_id].(string)
-			// below is a placeholder
-			kv_payload[k] = key_id
+				url_parts := strings.Split(v.(string), "/")
+				key_id := url_parts[len(url_parts)-1]
+				kv_payload[k] = response.Data[key_id].(string)
+			}
 		}
 
 		return operations.NewGetSecretsOK().WithPayload(kv_payload)
