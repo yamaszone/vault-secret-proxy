@@ -10,8 +10,8 @@ import (
 	"os"
 	"strings"
 
-	errors "github.com/go-openapi/errors"
 	iam_auth "github.com/daveadams/onthelambda"
+	errors "github.com/go-openapi/errors"
 	runtime "github.com/go-openapi/runtime"
 	middleware "github.com/go-openapi/runtime/middleware"
 
