@@ -1,6 +1,6 @@
 FROM golang:1.12-alpine3.9 as builder
 
-RUN apk add --update git
+RUN apk add --update curl git
 
 ADD https://github.com/golang/dep/releases/download/v0.5.0/dep-linux-amd64 /usr/local/bin/dep
 RUN chmod +x /usr/local/bin/dep

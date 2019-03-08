@@ -45,7 +45,7 @@ func configureAPI(api *operations.VaultSecretsProxyAPI) http.Handler {
 	api.GetSecretsHandler = operations.GetSecretsHandlerFunc(func(params operations.GetSecretsParams) middleware.Responder {
 		kv_payload, err := utils.ReadJsonFile("/etc/kv-data.json")
 		if err != nil {
-			api.Logger("Error reading key-value data file.")
+			api.Logger("ERROR: Failed to read key-value input data file.")
 		}
 
 		// The following is a cheap approach for local development
@@ -60,18 +60,26 @@ func configureAPI(api *operations.VaultSecretsProxyAPI) http.Handler {
 		} else {
 			client, err := iam_auth.VaultClient()
 			if err != nil {
-				log.Fatalf("ERROR: %s", err)
+				api.Logger("ERROR: %s", err)
 			}
-			api.Logger("Successfully authenticated with Vault server.")
+			api.Logger("INFO: Successfully authenticated with Vault server.")
 
 			for k, v := range kv_payload {
-				response, err := client.Logical().Read(v.(string))
+				path := v.(string)
+				api.Logger("INFO: Fetching secrets for path: %s \n", path)
+				response, err := client.Logical().Read(path)
+				// Commented out for debugging
+				//fmt.Println("%s %s", err, response)
+				secret := ""
 				if err != nil {
 					api.Logger("ERROR: %s", err)
 				}
-				url_parts := strings.Split(v.(string), "/")
-				key_id := url_parts[len(url_parts)-1]
-				kv_payload[k] = response.Data[key_id].(string)
+				if response != nil {
+					url_parts := strings.Split(path, "/")
+					key_id := url_parts[len(url_parts)-1]
+					secret = response.Data[key_id].(string)
+				}
+				kv_payload[k] = secret
 			}
 		}
 
