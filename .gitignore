@@ -14,3 +14,6 @@
 *.out
 
 vendor/
+*.swp
+# BATS assertions library
+tests/bats/helpers/assertions
