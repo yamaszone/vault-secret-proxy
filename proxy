@@ -8,25 +8,39 @@ usage(){
         printf "\t enter\t\t: Enter Vault IAM auth proxy.\n"
         printf "\t health\t\t: Run healthcheck.\n"
         printf "\t read\t\t: Read secrets for keys configured in /etc/kv-data.json.\n"
-        printf "\t up\t\t: Spin up Vault IAM auth proxy.\n"
+        printf "\t up\t\t: Spin up Vault proxy specified by server type (e.g. ./proxy up [stub]).\n"
         printf "\t help\t\t: Show this help.\n"
 }
 
 spinup_client(){
+        local server_type="$1"
         [[ -z "$VAULT_ADDR" ]] && printf "ERROR: VAULT_ADDR not set.\n" && exit 1
         [[ -z "$VAULT_AUTH_ROLE" ]] && printf "ERROR: VAULT_AUTH_ROLE not set.\n" && exit 1
         [[ -z "$VAULT_AUTH_PROVIDER" ]] && printf "ERROR: VAULT_AUTH_PROVIDER not set.\n" && exit 1
 
         docker rm -f "$VLT_CONT_NAME"
-        docker run \
-                -d \
-                -e VAULT_ADDR="$VAULT_ADDR" \
-                -e VAULT_AUTH_ROLE="$VAULT_AUTH_ROLE" \
-                -e VAULT_AUTH_PROVIDER="$VAULT_AUTH_PROVIDER" \
-                --name "$VLT_CONT_NAME" \
-                -v $(pwd)/kv-data.json.sample:/etc/kv-data.json \
-                -p 8888:8888 \
-                yamaszone/vault-proxy:latest
+	if [[ "$server_type" == "stub" ]]; then
+		docker run \
+			-d \
+			-e VAULT_ADDR="$VAULT_ADDR" \
+			-e VAULT_IS_STUB="yes" \
+			-e VAULT_AUTH_ROLE="$VAULT_AUTH_ROLE" \
+			-e VAULT_AUTH_PROVIDER="$VAULT_AUTH_PROVIDER" \
+			--name "$VLT_CONT_NAME" \
+			-v $(pwd)/kv-data.json.sample:/etc/kv-data.json \
+			-p 8888:8888 \
+			yamaszone/vault-proxy:latest
+	else
+		docker run \
+			-d \
+			-e VAULT_ADDR="$VAULT_ADDR" \
+			-e VAULT_AUTH_ROLE="$VAULT_AUTH_ROLE" \
+			-e VAULT_AUTH_PROVIDER="$VAULT_AUTH_PROVIDER" \
+			--name "$VLT_CONT_NAME" \
+			-v $(pwd)/kv-data.json.sample:/etc/kv-data.json \
+			-p 8888:8888 \
+			yamaszone/vault-proxy:latest
+	fi
 }
 
 if [[ -z "$1" ]];then
@@ -42,7 +56,7 @@ case "$1" in
                 docker exec -it "$VLT_CONT_NAME" sh
                 ;;
         up)
-                spinup_client
+                spinup_client $2
                 ;;
         read)
                 curl -sS http://127.0.0.1:8888/v1/secrets | jq .
