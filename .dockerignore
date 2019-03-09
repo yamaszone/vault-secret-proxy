@@ -1,0 +1,10 @@
+.dockerignore
+.git
+.gitignore
+build
+Dockerfile*
+deployments
+LICENSE
+README.md
+tests
+
