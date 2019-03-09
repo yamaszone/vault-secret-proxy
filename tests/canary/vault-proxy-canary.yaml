@@ -9,12 +9,15 @@ data:
   VAULT_AUTH_ROLE: iam-role
   VAULT_IS_STUB: "no"
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: vault-canary
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: vault-canary
   template:
     metadata:
       labels:
