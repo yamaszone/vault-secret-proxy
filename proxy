@@ -8,6 +8,7 @@ usage(){
         printf "\t enter\t\t: Enter Vault IAM auth proxy.\n"
         printf "\t health\t\t: Run healthcheck.\n"
         printf "\t read\t\t: Read secrets for keys configured in /etc/kv-data.json.\n"
+        printf "\t run\t\t: Setup BATS and run tests.\n"
         printf "\t up\t\t: Spin up Vault proxy specified by server type (e.g. ./proxy up [stub]).\n"
         printf "\t help\t\t: Show this help.\n"
 }
