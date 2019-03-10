@@ -1,5 +1,7 @@
 # Vault Secret Proxy Sidecar
-Vault secret proxy [sidecar](https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/45406.pdf) using [AWS IAM Auth](https://www.vaultproject.io/docs/auth/aws.html#iam-auth-method).
+Vault secret proxy [sidecar](https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/45406.pdf) using [AWS IAM Auth](https://www.vaultproject.io/docs/auth/aws.html#iam-auth-method)
+![alt text](https://github.com/yamaszone/vault-secret-proxy/blob/master/docs/vault-secret-proxy-sidecar-architecture.png)
+
 
 ## Usage
 Vault secret proxy sidecar can be used by any service (__Primary App__) running within a Kubernetes Pod in AWS. It can be used as a stub server during local development. See the following links for usage instructions:
