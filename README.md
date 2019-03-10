@@ -52,4 +52,4 @@ Vault secret proxy sidecar can be used by any service (__Primary App__) running 
     Date: Sun, 03 Mar 2019 03:08:54 GMT
     ```
 #### Credits
-- [github.com/daveadams/onthelambda](github.com/daveadams/onthelambda)
+- [github.com/daveadams/onthelambda](https://github.com/daveadams/onthelambda)
