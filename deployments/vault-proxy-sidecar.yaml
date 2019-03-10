@@ -10,8 +10,8 @@ data:
   VAULT_IS_STUB: "no"
   kv-data.json: |
     {
-      "API_TOKEN": "vault-mount/app/token2",
-      "DB_PASSWORD": "vault-mount/app/db/password2"
+      "API_TOKEN": "vault-mount/app/token",
+      "DB_PASSWORD": "vault-mount/app/db/password"
     }
 
 ---
