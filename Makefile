@@ -15,7 +15,8 @@ gen: validate
 		--name=vault-secrets-proxy
 
 run: install
-	sudo cp kv-data.json.sample /etc/kv-data.json
+	sudo mkdir -p /etc/vault
+	sudo cp kv-data.json.sample /etc/vault/kv-data.json
 	~/go/bin/vault-secrets-proxy-server --host=0.0.0.0 --port=9999
 
 test:

@@ -4,13 +4,19 @@ VLT_CONT_NAME=vault-proxy
 
 usage(){
         printf "Usage:\n"
+        printf "\t build\t\t: Build Vault IAM auth proxy container specified by image name.\n"
         printf "\t down\t\t: Teardown Vault IAM auth proxy.\n"
         printf "\t enter\t\t: Enter Vault IAM auth proxy.\n"
-        printf "\t health\t\t: Run healthcheck.\n"
+        printf "\t health\t\t: Run health check.\n"
         printf "\t read\t\t: Read secrets for keys configured in /etc/kv-data.json.\n"
         printf "\t run\t\t: Setup BATS and run tests.\n"
         printf "\t up\t\t: Spin up Vault proxy specified by server type (e.g. ./proxy up [stub]).\n"
         printf "\t help\t\t: Show this help.\n"
+}
+
+build_image(){
+        local image_name=${1:-yamaszone/vault-proxy:latest}
+        docker build --no-cache -t "$image_name" .
 }
 
 spinup_client(){
@@ -28,7 +34,7 @@ spinup_client(){
 			-e VAULT_AUTH_ROLE="$VAULT_AUTH_ROLE" \
 			-e VAULT_AUTH_PROVIDER="$VAULT_AUTH_PROVIDER" \
 			--name "$VLT_CONT_NAME" \
-			-v $(pwd)/kv-data.json.sample:/etc/kv-data.json \
+			-v $(pwd)/kv-data.json.sample:/etc/vault/kv-data.json \
 			-p 8888:8888 \
 			yamaszone/vault-proxy:latest
 	else
@@ -38,7 +44,7 @@ spinup_client(){
 			-e VAULT_AUTH_ROLE="$VAULT_AUTH_ROLE" \
 			-e VAULT_AUTH_PROVIDER="$VAULT_AUTH_PROVIDER" \
 			--name "$VLT_CONT_NAME" \
-			-v $(pwd)/kv-data.json.sample:/etc/kv-data.json \
+			-v $(pwd)/kv-data.json.sample:/etc/vault/kv-data.json \
 			-p 8888:8888 \
 			yamaszone/vault-proxy:latest
 	fi
@@ -50,6 +56,9 @@ if [[ -z "$1" ]];then
 fi
 
 case "$1" in
+        build)
+                build_image $2
+        ;;
         down)
                 docker rm -f "$VLT_CONT_NAME"
                 ;;
@@ -60,10 +69,10 @@ case "$1" in
                 spinup_client $2
                 ;;
         read)
-                curl -sS http://127.0.0.1:8888/v1/secrets | jq .
+                docker exec "$VLT_CONT_NAME" curl -sS http://localhost:8888/v1/secrets | jq .
                 ;;
         health)
-                curl -v -sS http://127.0.0.1:8888/v1/healthz
+                docker exec "$VLT_CONT_NAME" curl -v -sS http://localhost:8888/v1/healthz
                 ;;
         run)
                 ./run "${@:2}"
