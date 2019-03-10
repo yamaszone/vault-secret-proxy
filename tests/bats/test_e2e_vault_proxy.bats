@@ -12,7 +12,7 @@ load helper
 	[ "$status" -eq 0 ]
 
 	sleep 15
-	pod_id=$(kubectl get pods | grep "^vault-canary-stub" | grep "Running" | awk '{print $1}')
+	pod_id=$(kubectl get pods | grep "^vault-sidecar-stub" | grep "Running" | awk '{print $1}')
 	# wait is an experimental feature. Commented out for now.
 	#kubectl wait --for=condition=Ready pod/${pod_id}
 

@@ -2,26 +2,32 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: vault-canary-stub
+  name: vault-sidecar-stub
 data:
   VAULT_ADDR: https://vault.addr
   VAULT_AUTH_PROVIDER: vault-provider
   VAULT_AUTH_ROLE: iam-role
   VAULT_IS_STUB: "yes"
+  kv-data.json: |
+    {
+      "API_TOKEN": "vault-mount/app/token",
+      "DB_PASSWORD": "vault-mount/app/db/password"
+    }
+
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: vault-canary-stub
+  name: vault-sidecar-stub
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: vault-canary-stub
+      app: vault-sidecar-stub
   template:
     metadata:
       labels:
-        app: vault-canary-stub
+        app: vault-sidecar-stub
     spec:
       containers:
         - name: primary-app
@@ -34,27 +40,41 @@ spec:
               while true; do
                 sleep 3600
               done
-        - name: vault-canary-stub
+          volumeMounts:
+            - name: vault-sidecar-stub
+              mountPath: /etc/vault
+        - name: vault-sidecar-stub
           image: yamaszone/vault-proxy:latest
           imagePullPolicy: Always
           env:
             - name: VAULT_ADDR
               valueFrom:
                 configMapKeyRef:
-                  name: vault-canary-stub
+                  name: vault-sidecar-stub
                   key: VAULT_ADDR
             - name: VAULT_AUTH_PROVIDER
               valueFrom:
                 configMapKeyRef:
-                  name: vault-canary-stub
+                  name: vault-sidecar-stub
                   key: VAULT_AUTH_PROVIDER
             - name: VAULT_AUTH_ROLE
               valueFrom:
                 configMapKeyRef:
-                  name: vault-canary-stub
+                  name: vault-sidecar-stub
                   key: VAULT_AUTH_ROLE
             - name: VAULT_IS_STUB
               valueFrom:
                 configMapKeyRef:
-                  name: vault-canary-stub
+                  name: vault-sidecar-stub
                   key: VAULT_IS_STUB
+          volumeMounts:
+            - name: vault-sidecar-stub
+              mountPath: /etc/vault
+
+      volumes:
+        - name: vault-sidecar-stub
+          configMap:
+            name: vault-sidecar-stub
+            items:
+            - key: kv-data.json
+              path: kv-data.json
